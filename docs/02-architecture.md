@@ -23,18 +23,18 @@ Dependency direction: **UI → Service → Repository → Model**. Nothing point
 ## Folder structure
 
 ```
+assets/
+  fonts/  sounds/  themes/  companions/  icons/
+data/
+  catalog/                  bundled shop catalog (sounds, themes, companions)
 lib/
   main.dart                 app entry, creates services, starts the app
   model/                    one file per entity and enum
   service/                  one file per service
-  data/                     repositories (in-memory first)
-  data/catalog/             bundled shop catalog (sounds, themes, companions)
   ui/
     theme/                  colors, text styles, spacing, radii, durations
     widgets/                reusable widgets shared by several screens
     screens/                one folder per area: home, planner, focus, shop, notes, profile
-assets/
-  fonts/  sounds/  themes/  companions/  icons/
 test/
   service/
 ```

@@ -6,16 +6,19 @@ Every operation below lists its rules and its invalid cases. Each row maps direc
 
 ## Overview
 
-| Service | Owns | Depends on (Abstract Interfaces) | Author |
-|---|---|---|---|
-| **TaskService** | Tasks | TaskRepository (abstract) | Tiek Chhunhour |
-| **AssignmentService** | Assignments, Subtasks | AssignmentRepository (abstract) | Tiek Chhunhour |
-| **FocusService** | Focus sessions | SessionRepository (abstract), WalletService, Inventory | Yeat David |
-| **WalletService** | Balance and coin history | WalletRepository (abstract) | Yeat David |
-| **ShopService** | Purchases and equipping | Catalog, InventoryRepository (abstract), WalletService | Yeat David |
+| Service | Owns | Data Storage (Milestone 2) | Depends on | Author |
+|---|---|---|---|---|
+| **TaskService** | Tasks | Direct in-memory `List<Task>` *(Repository optional)* | None | Tiek Chhunhour |
+| **AssignmentService** | Assignments, Subtasks | Direct in-memory `List<Assignment>` *(Repository optional)* | None | Tiek Chhunhour |
+| **FocusService** | Focus sessions | Direct in-memory `List<FocusSession>` *(Repository optional)* | WalletService, Inventory | Yeat David |
+| **WalletService** | Balance and coin history | Direct in-memory `Wallet` + `List<CoinTransaction>` | None | Yeat David |
+| **ShopService** | Purchases and equipping | In-memory catalog + user `Inventory` | WalletService | Yeat David |
 
 *WalletService is the only class allowed to change the coin balance. Other services invoke its methods to award or spend coins.*
-*All repositories are defined as abstract classes (`abstract class TaskRepository`, etc.) following the Dependency Inversion Principle. Services depend strictly on abstractions, allowing in-memory implementations in Milestone 2 and persistent storage in Milestone 4.*
+
+> [!NOTE]
+> **Data Storage in Repositories is Optional Right Now:**  
+> For Milestone 2, storing data through dedicated `Repository` classes is **completely optional**. Services manage their own state directly in in-memory collections (e.g. `List<Task> _tasks` inside `TaskService`). This keeps Milestone 2 lightweight, simple, and 100% unit-testable. The abstract repository layer (`TaskRepository`, etc.) is an optional architecture pattern that can be adopted later in Milestone 4 when connecting to permanent device storage (SQLite or `shared_preferences`).
 
 ---
 
@@ -29,7 +32,7 @@ classDiagram
     direction LR
 
     class TaskService {
-        -TaskRepository repository
+        -List~Task~ tasks
         +createTask(title, priority, dueDate) Task
         +updateTask(id, changes) Task
         +deleteTask(id) void
@@ -57,8 +60,7 @@ classDiagram
     }
 
     PlanItem <|-- Task : inherits
-    TaskService ..> TaskRepository : uses interface
-    TaskService *-- "*" Task : tasks
+    TaskService *-- "*" Task : tasks (in-memory)
 ```
 
 ---
@@ -71,7 +73,8 @@ classDiagram
     direction LR
 
     class AssignmentService {
-        -AssignmentRepository repository
+        -List~Assignment~ assignments
+        -List~Subtask~ subtasks
         +createAssignment(title, dueDate, priority, description) Assignment
         +updateAssignment(id, changes) Assignment
         +deleteAssignment(id) void
@@ -109,8 +112,7 @@ classDiagram
     }
 
     PlanItem <|-- Assignment : inherits
-    AssignmentService ..> AssignmentRepository : uses interface
-    AssignmentService *-- "*" Assignment : assignments
+    AssignmentService *-- "*" Assignment : assignments (in-memory)
     AssignmentService *-- "*" Subtask : subtasks
     Assignment "1" *-- "*" Subtask : owns (Composition)
 ```
@@ -125,7 +127,7 @@ classDiagram
     direction LR
 
     class FocusService {
-        -SessionRepository repository
+        -List~FocusSession~ sessions
         +startSession(plannedMinutes, sessionIndex, isBreak, targetPlanItemId, soundId) FocusSession
         +pause(id) FocusSession
         +resume(id) FocusSession
@@ -155,7 +157,7 @@ classDiagram
         +String title
     }
 
-    FocusService *-- "*" FocusSession : sessions
+    FocusService *-- "*" FocusSession : sessions (in-memory)
     FocusSession ..> "0..1" PlanItem : targets polymorphically
 ```
 
@@ -262,7 +264,7 @@ classDiagram
     direction LR
 
     class TaskService {
-        -TaskRepository repository
+        -List~Task~ tasks
         +createTask(title, priority, dueDate) Task
         +updateTask(id, changes) Task
         +deleteTask(id) void
@@ -271,7 +273,8 @@ classDiagram
     }
 
     class AssignmentService {
-        -AssignmentRepository repository
+        -List~Assignment~ assignments
+        -List~Subtask~ subtasks
         +createAssignment(title, dueDate, priority, description) Assignment
         +deleteAssignment(id) void
         +addSubtask(assignmentId, title) Subtask
@@ -280,7 +283,7 @@ classDiagram
     }
 
     class FocusService {
-        -SessionRepository repository
+        -List~FocusSession~ sessions
         +startSession(plannedMinutes, sessionIndex, isBreak, targetPlanItemId, soundId) FocusSession
         +pause(id) FocusSession
         +resume(id) FocusSession
@@ -364,10 +367,10 @@ classDiagram
     PlanItem <|-- Task : inherits
     PlanItem <|-- Assignment : inherits
 
-    TaskService *-- "*" Task : tasks
-    AssignmentService *-- "*" Assignment : assignments
+    TaskService *-- "*" Task : tasks (in-memory)
+    AssignmentService *-- "*" Assignment : assignments (in-memory)
     AssignmentService *-- "*" Subtask : subtasks
-    FocusService *-- "*" FocusSession : sessions
+    FocusService *-- "*" FocusSession : sessions (in-memory)
     WalletService *-- "*" CoinTransaction : transactions
     ShopService *-- "*" ShopItem : catalog
 
@@ -380,8 +383,8 @@ classDiagram
 
 ---
 
-### 7. Repository Layer Abstract Contracts (Dependency Inversion)
-*Services depend on abstract repository interfaces rather than concrete storage classes. This allows in-memory mock repositories during testing and seamlessly swapping to local SQLite or file storage later without touching business logic:*
+### 7. Optional Repository Contracts (Future / M4 Storage Abstraction)
+*Storing data in dedicated `Repository` classes is **completely optional** for Milestone 2. To keep Milestone 2 simple and testable, services can hold their in-memory data collections directly. When permanent storage is introduced in Milestone 4 (such as SQLite or `shared_preferences`), abstract repository contracts can be implemented to decouple storage from business logic:*
 
 ```mermaid
 classDiagram

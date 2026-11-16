@@ -23,7 +23,7 @@ Register every folder under `assets:` in `pubspec.yaml`.
 
 ## The catalog
 
-The catalog lists every shop item. It can be a Dart list of ShopItem objects in `lib/data/catalog/` or a bundled JSON file read at startup. Either way, each item has:
+The catalog lists every shop item. It can be a Dart list of ShopItem objects in `data/catalog/` or a bundled JSON file read at startup. Either way, each item has:
 
 | Field     | Example                  |
 | --------- | ------------------------ |
