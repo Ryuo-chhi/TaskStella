@@ -9,7 +9,7 @@ assets/
   fonts/      Nunito-Regular, Nunito-SemiBold, Nunito-Bold
   sounds/     rain, cafe, forest, lofi, ocean, white_noise, fireplace
   themes/     one folder per theme with its scene illustration
-  chibis/     one folder per chibi, one image per state
+  Companions/     one folder per Companion, one image per state
   icons/      only if the chosen icon set is not built in
 ```
 
@@ -18,23 +18,23 @@ Register every folder under `assets:` in `pubspec.yaml`.
 ## Naming
 
 - Lowercase with underscores: `rain.mp3`, `moonlit_lavender/scene.png`.
-- Chibi states use the same four names for every chibi: `idle`, `studying`, `cheering`, `sleeping`.
+- Companion states use the same four names for every Companion: `idle`, `studying`, `cheering`, `sleeping`.
 - Raster images need 1x, 2x and 3x versions in Flutter's density folders (`2.0x/`, `3.0x/`). Prefer SVG or vector where possible, but check the package is allowed first.
 
 ## The catalog
 
 The catalog lists every shop item. It can be a Dart list of ShopItem objects in `lib/data/catalog/` or a bundled JSON file read at startup. Either way, each item has:
 
-| Field | Example |
-|---|---|
-| id | `sound_rain` |
-| name | Rain |
-| type | sound |
-| price | 0 |
+| Field     | Example                  |
+| --------- | ------------------------ |
+| id        | `sound_rain`             |
+| name      | Rain                     |
+| type      | sound                    |
+| price     | 0                        |
 | assetPath | `assets/sounds/rain.mp3` |
-| isStarter | true |
+| isStarter | true                     |
 
-Starter items (free, always owned): Rain sound, Cream Meadow theme, the starter chibi.
+Starter items (free, always owned): Rain sound, Cream Meadow theme, the starter Companion.
 
 ## Adding a new shop item
 
@@ -55,8 +55,8 @@ No screen code should need to change.
 
 Track which art and sounds are still missing so placeholders are never shipped by accident.
 
-| Asset | Status | Owner |
-|---|---|---|
-| Starter chibi (4 states) | | |
-| Cream Meadow scene | | |
-| Rain sound | | |
+| Asset                        | Status | Owner |
+| ---------------------------- | ------ | ----- |
+| Starter Companion (4 states) |        |       |
+| Cream Meadow scene           |        |       |
+| Rain sound                   |        |       |

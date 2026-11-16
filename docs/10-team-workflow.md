@@ -4,17 +4,17 @@ TaskStella is built by a team of two. The course checks that each member contrib
 
 ## Ownership split (proposal)
 
-| Area | Member A | Member B |
-|---|---|---|
-| Models | Task, Course, Assignment, Subtask | FocusSession, Wallet, CoinTransaction, ShopItem, Inventory |
-| Services | TaskService, AssignmentService | FocusService, WalletService, ShopService |
-| Tests | Tests for A's services | Tests for B's services |
-| Screens | Home, Planner, Add/Edit Task, Assignments, Assignment Detail, Courses | Focus Setup, Focus Timer, Session Complete, Shop, Purchase sheet, Collection |
-| Shared | Theme tokens, layout widgets, BottomNavBar | Cards for shop, CoinChip, ChibiView, ThemeScene, audio |
+| Area     | Member A (Tiek Chhunhour)                              | Member B (Yeat David)                                                        |
+| -------- | ------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| Models   | Task, Assignment, Subtask (Course deferred to M3)      | FocusSession, Wallet, CoinTransaction, ShopItem, Inventory                   |
+| Services | TaskService, AssignmentService                         | FocusService, WalletService, ShopService                                     |
+| Tests    | Tests for A's services (`test/service/`)              | Tests for B's services (`test/service/`)                                     |
+| Screens  | Home, Planner, Add/Edit Task, Assignments, Assignment Detail | Focus Setup, Focus Timer, Session Complete, Shop, Purchase sheet, Collection |
+| Shared   | Theme tokens, layout widgets, BottomNavBar             | Cards for shop, CoinChip, CompanionView, ThemeScene, audio                   |
 
-Names: Member A = `________`, Member B = `________`.
+Names: Member A = `Tiek Chhunhour`, Member B = `Yeat David`.
 
-Shared contract: TaskService and AssignmentService call WalletService to award coins. Agree on WalletService's operations early (see [04-services-and-rules.md](04-services-and-rules.md#walletservice)) so both sides can work in parallel.
+Shared contract: FocusService calls WalletService to award coins when focus sessions are completed and claimed. Agree on WalletService's operations early (see [04-services-and-rules.md](04-services-and-rules.md#4-walletservice-author-yeat-david)) so both sides can work in parallel.
 
 Both members should still understand the whole app, since the jury can ask anyone about anything.
 
@@ -22,7 +22,7 @@ Both members should still understand the whole app, since the jury can ask anyon
 
 - `main` always runs and passes tests.
 - Work on a branch per feature: `feature/task-service`, `feature/shop-screen`.
-- Small commits with clear messages that describe what changed, for example "Add rewardClaimed flag to prevent double task rewards".
+- Small commits with clear messages that describe what changed, for example "Add rewardClaimed flag to prevent double session rewards".
 - Before merging into `main`: `flutter analyze` is clean, `dart format .` is applied, `flutter test` passes.
 - The other member reviews the merge request and reads the code. Reviewing is a good way to prepare for interview questions about the partner's part.
 - Never commit for the partner or squash their commits into yours. Commits are the evidence of contribution.

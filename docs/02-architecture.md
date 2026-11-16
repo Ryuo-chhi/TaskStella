@@ -4,13 +4,13 @@ TaskStella follows the layered architecture taught in the course: **model**, **s
 
 ## Layers
 
-| Layer | Job | Knows about | Must not know about |
-|---|---|---|---|
-| Model | Describes the data: Task, Assignment, Wallet... Holds simple validation for itself. | Nothing else | Flutter, services, storage |
-| Service | Business rules: completing a task, awarding coins, buying an item. Plain Dart classes. | Models, repositories | Flutter widgets, `BuildContext`, screens |
-| Data (repository) | Stores and loads models. Starts as in-memory lists. | Models | Services, UI |
-| UI | Screens and widgets. Shows data, collects input, calls services, calls `setState`. | Services, models, theme | Storage details, business rules |
-| Test | Proves every service operation works. | Models, services, repositories | UI (unit tests only) |
+| Layer             | Job                                                                                    | Knows about                    | Must not know about                      |
+| ----------------- | -------------------------------------------------------------------------------------- | ------------------------------ | ---------------------------------------- |
+| Model             | Describes the data: Task, Assignment, Wallet... Holds simple validation for itself.    | Nothing else                   | Flutter, services, storage               |
+| Service           | Business rules: completing a task, awarding coins, buying an item. Plain Dart classes. | Models, repositories           | Flutter widgets, `BuildContext`, screens |
+| Data (repository) | Stores and loads models. Starts as in-memory lists.                                    | Models                         | Services, UI                             |
+| UI                | Screens and widgets. Shows data, collects input, calls services, calls `setState`.     | Services, models, theme        | Storage details, business rules          |
+| Test              | Proves every service operation works.                                                  | Models, services, repositories | UI (unit tests only)                     |
 
 Dependency direction: **UI → Service → Repository → Model**. Nothing points upward.
 
@@ -25,19 +25,18 @@ Dependency direction: **UI → Service → Repository → Model**. Nothing point
 ```
 lib/
   main.dart                 app entry, creates services, starts the app
-  models/                   one file per entity
-  services/                 one file per service
+  model/                    one file per entity and enum
+  service/                  one file per service
   data/                     repositories (in-memory first)
-  data/catalog/             bundled shop catalog (sounds, themes, chibis)
+  data/catalog/             bundled shop catalog (sounds, themes, companions)
   ui/
     theme/                  colors, text styles, spacing, radii, durations
     widgets/                reusable widgets shared by several screens
     screens/                one folder per area: home, planner, focus, shop, notes, profile
 assets/
-  fonts/  sounds/  themes/  chibis/  icons/
+  fonts/  sounds/  themes/  companions/  icons/
 test/
-  models/
-  services/
+  service/
 ```
 
 This is layer-first, not feature-first. `AGENTS.md` suggests feature folders, but the course architecture wins.
@@ -54,7 +53,7 @@ The course forbids state management packages. The approach:
 
 ### Shared values across tabs
 
-The coin balance, equipped theme and equipped chibi appear on many screens. Keep the services as the single owner of these values. The root app widget is a `StatefulWidget` that rebuilds the `MaterialApp` theme when the equipped theme changes, and passes a callback such as `onThemeChanged` down to the screens that can change it (Shop, Collection).
+The coin balance, equipped theme and equipped Companion appear on many screens. Keep the services as the single owner of these values. The root app widget is a `StatefulWidget` that rebuilds the `MaterialApp` theme when the equipped theme changes, and passes a callback such as `onThemeChanged` down to the screens that can change it (Shop, Collection).
 
 ## Navigation
 
@@ -73,10 +72,10 @@ Use Flutter's built-in `Navigator` with `MaterialPageRoute`.
 
 Fill in this table as the team decides. Ask the teacher if a package is allowed before adding it.
 
-| Decision | Options | Chosen | Reason | Date |
-|---|---|---|---|---|
-| Storage | In-memory only, `shared_preferences` (JSON), local database | | | |
-| Audio package | `just_audio`, `audioplayers` | | | |
-| Error style in services | Exceptions, result objects | | | |
-| Coin amounts | See [04-services-and-rules.md](04-services-and-rules.md#coin-rules) | Task 5, subtask 2, assignment 10, focus 1 per minute, early finish half rate, 10 task rewards per day | Focus earns most, task farming capped | 2026-10-30 |
-| Flutter version | | | | |
+| Decision                | Options                                                             | Chosen                                                                                                | Reason                                | Date       |
+| ----------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------- | ---------- |
+| Storage                 | In-memory only, `shared_preferences` (JSON), local database         |                                                                                                       |                                       |            |
+| Audio package           | `just_audio`, `audioplayers`                                        |                                                                                                       |                                       |            |
+| Error style in services | Exceptions, result objects                                          |                                                                                                       |                                       |            |
+| Coin amounts            | See [04-services-and-rules.md](04-services-and-rules.md#coin-rules) | Focus 1 per minute (25 coins per 25-min session, claimed per session with rewardClaimed lock; 5-min break earns 0). Tasks/assignments earn 0 to prevent checkbox farming. | Focus earns most, task farming prevented | 2026-10-30 |
+| Flutter version         |                                                                     |                                                                                                       |                                       |            |

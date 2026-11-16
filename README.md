@@ -74,8 +74,8 @@ Stay motivated by earning and spending Star Coins.
 The primary actor is the **User (Student)**, interacting across three main modules:
 
 1. **Daily Planning:** View Daily Tasks, Create Task, Update/Delete Task, Complete Task.
-2. **Focus & Productivity:** Start Focus Session $\rightarrow$ Complete Focus Session.
-3. **Gamification & Rewards:** Earn Star Coins (triggered by task and focus session completions), Browse Rewards Shop, Purchase Reward Item.
+2. **Focus & Productivity:** Start Focus Session → Complete Focus Session → Claim Session Reward.
+3. **Gamification & Rewards:** Earn Star Coins (triggered by claiming completed focus mode sessions), Browse Rewards Shop, Purchase Reward Item.
 
 ---
 
